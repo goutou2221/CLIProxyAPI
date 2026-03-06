@@ -261,6 +261,9 @@ func BuildAPIKeyClients(cfg *config.Config) (int, int, int, int, int) {
 	if len(cfg.CodexKey) > 0 {
 		codexAPIKeyCount += len(cfg.CodexKey)
 	}
+	if len(cfg.CopilotKey) > 0 {
+		codexAPIKeyCount += len(cfg.CopilotKey)
+	}
 	if len(cfg.OpenAICompatibility) > 0 {
 		for _, compatConfig := range cfg.OpenAICompatibility {
 			openAICompatCount += len(compatConfig.APIKeyEntries)
