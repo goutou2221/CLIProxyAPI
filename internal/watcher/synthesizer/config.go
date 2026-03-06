@@ -31,6 +31,8 @@ func (s *ConfigSynthesizer) Synthesize(ctx *SynthesisContext) ([]*coreauth.Auth,
 	out = append(out, s.synthesizeClaudeKeys(ctx)...)
 	// Codex API Keys
 	out = append(out, s.synthesizeCodexKeys(ctx)...)
+	// Copilot API Keys
+	out = append(out, s.synthesizeCopilotKeys(ctx)...)
 	// OpenAI-compat
 	out = append(out, s.synthesizeOpenAICompat(ctx)...)
 	// Vertex-compat
@@ -172,6 +174,50 @@ func (s *ConfigSynthesizer) synthesizeCodexKeys(ctx *SynthesisContext) []*coreau
 			ID:         id,
 			Provider:   "codex",
 			Label:      "codex-apikey",
+			Prefix:     prefix,
+			Status:     coreauth.StatusActive,
+			ProxyURL:   proxyURL,
+			Attributes: attrs,
+			CreatedAt:  now,
+			UpdatedAt:  now,
+		}
+		ApplyAuthExcludedModelsMeta(a, cfg, ck.ExcludedModels, "apikey")
+		out = append(out, a)
+	}
+	return out
+}
+
+// synthesizeCopilotKeys creates Auth entries for GitHub Copilot API keys (GitHub tokens).
+func (s *ConfigSynthesizer) synthesizeCopilotKeys(ctx *SynthesisContext) []*coreauth.Auth {
+	cfg := ctx.Config
+	now := ctx.Now
+	idGen := ctx.IDGenerator
+
+	out := make([]*coreauth.Auth, 0, len(cfg.CopilotKey))
+	for i := range cfg.CopilotKey {
+		ck := cfg.CopilotKey[i]
+		key := strings.TrimSpace(ck.APIKey)
+		if key == "" {
+			continue
+		}
+		prefix := strings.TrimSpace(ck.Prefix)
+		id, token := idGen.Next("copilot:apikey", key, ck.BaseURL)
+		attrs := map[string]string{
+			"source":  fmt.Sprintf("config:copilot[%s]", token),
+			"api_key": key,
+		}
+		if ck.Priority != 0 {
+			attrs["priority"] = strconv.Itoa(ck.Priority)
+		}
+		if ck.BaseURL != "" {
+			attrs["base_url"] = ck.BaseURL
+		}
+		addConfigHeadersToAttrs(ck.Headers, attrs)
+		proxyURL := strings.TrimSpace(ck.ProxyURL)
+		a := &coreauth.Auth{
+			ID:         id,
+			Provider:   "copilot",
+			Label:      "copilot-apikey",
 			Prefix:     prefix,
 			Status:     coreauth.StatusActive,
 			ProxyURL:   proxyURL,
