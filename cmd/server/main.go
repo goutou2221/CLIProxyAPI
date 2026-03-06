@@ -53,6 +53,7 @@ func init() {
 // It parses command-line flags, loads configuration, and starts the appropriate
 // service based on the provided flags (login, codex-login, or server mode).
 func main() {
+	fmt.Println("Hello!")
 	fmt.Printf("CLIProxyAPI Version: %s, Commit: %s, BuiltAt: %s\n", buildinfo.Version, buildinfo.Commit, buildinfo.BuildDate)
 
 	// Command-line flags to control the application's behavior.
