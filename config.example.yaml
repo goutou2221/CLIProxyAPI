@@ -137,6 +137,21 @@ nonstream-keepalive-interval: 0
 #       - "*-mini"          # wildcard matching suffix (e.g. gpt-5-codex-mini)
 #       - "*codex*"         # wildcard matching substring (e.g. gpt-5-codex-low)
 
+# GitHub Copilot API keys (GitHub personal access tokens or OAuth tokens)
+# Use `copilot login` to authenticate via GitHub OAuth device flow, or provide
+# a GitHub personal access token with the `read:user` scope directly.
+# The proxy will automatically exchange this for short-lived Copilot tokens.
+# copilot-api-key:
+#   - api-key: "ghp_your_github_token"     # GitHub personal access token
+#     prefix: "test"                        # optional: require calls like "test/gpt-4o" to target this credential
+#     base-url: ""                          # optional: override Copilot API base URL
+#     proxy-url: "socks5://proxy.example.com:1080" # optional: per-key proxy override
+#     models:
+#       - name: "gpt-4o"       # upstream model name
+#         alias: "copilot-gpt" # client alias mapped to the upstream model
+#     excluded-models:
+#       - "o1"                 # exclude specific models
+
 # Claude API keys
 # claude-api-key:
 #   - api-key: "sk-atSM..." # use the official claude API key, no need to set the base url
@@ -241,8 +256,8 @@ nonstream-keepalive-interval: 0
 
 # Global OAuth model name aliases (per channel)
 # These aliases rename model IDs for both model listing and request routing.
-# Supported channels: gemini-cli, vertex, aistudio, antigravity, claude, codex, qwen, iflow, kimi.
-# NOTE: Aliases do not apply to gemini-api-key, codex-api-key, claude-api-key, openai-compatibility, vertex-api-key, or ampcode.
+# Supported channels: gemini-cli, vertex, aistudio, antigravity, claude, codex, qwen, iflow, kimi, copilot.
+# NOTE: Aliases do not apply to gemini-api-key, codex-api-key, claude-api-key, copilot-api-key, openai-compatibility, vertex-api-key, or ampcode.
 # You can repeat the same name with different aliases to expose multiple client model names.
 # oauth-model-alias:
 #   gemini-cli:

@@ -36,6 +36,8 @@ func GetStaticModelDefinitionsByChannel(channel string) []*ModelInfo {
 		return GetAIStudioModels()
 	case "codex":
 		return GetOpenAIModels()
+	case "copilot":
+		return GetCopilotModels()
 	case "qwen":
 		return GetQwenModels()
 	case "iflow":
@@ -87,6 +89,7 @@ func LookupStaticModelInfo(modelID string) *ModelInfo {
 		GetQwenModels(),
 		GetIFlowModels(),
 		GetKimiModels(),
+		GetCopilotModels(),
 	}
 	for _, models := range allModels {
 		for _, m := range models {
